@@ -17,8 +17,14 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column
     private LocalDateTime DateOuverture;
-
+    @Column
+    private String description;
+    @ManyToOne
+    @JoinColumn(name = "signalPanne_id")
+    private SignalPanne signalPanne;
+    @ManyToOne
+    @JoinColumn(name = "technicien_id")
+    private Technicien technicien;
 }

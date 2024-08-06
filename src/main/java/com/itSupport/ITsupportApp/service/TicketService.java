@@ -1,11 +1,9 @@
 package com.itSupport.ITsupportApp.service;
 
-
-import com.hello_event.dto.TicketDTO;
-import com.hello_event.exception.DatabaseEmptyException;
-import com.hello_event.mapper.TicketMapper;
-import com.hello_event.model.Ticket;
-import com.hello_event.repository.TicketRepository;
+import com.itSupport.ITsupportApp.exception.DatabaseEmptyException;
+import com.itSupport.ITsupportApp.model.Technicien;
+import com.itSupport.ITsupportApp.model.Ticket;
+import com.itSupport.ITsupportApp.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,23 +16,35 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TicketService {
     private final TicketRepository ticketRepository;
-    private final TicketMapper ticketMapper;
+    private final TechnicienService technicienService;
 
-    public TicketDTO save(TicketDTO ticketDTO) {
-        Ticket ticket = ticketMapper.toEntity(ticketDTO);
-        ticket.setPurchaseDate(LocalDateTime.now());
+    public Ticket save(Ticket ticket) {
+        ticket.setDateOuverture(LocalDateTime.now());
         ticket = ticketRepository.save(ticket);
-        return ticketMapper.toDTO(ticket);
+        return ticket;
     }
-
-    public List<Ticket> getTicketsByIdUser(Long userId) {
-        List<Ticket> tickets = ticketRepository.findAllByUser_IdUser(userId);
+    public Ticket attribuerTechnicien(Ticket ticket,Long idTechnicien) {
+        Technicien technicien = technicienService.getTechnicienById(idTechnicien);
+        ticket.setTechnicien(technicien);
+        ticket = ticketRepository.save(ticket);
+        return ticket;
+    }
+    public List<Ticket> getAllTicketByTechnicien(Long idTechnicien) {
+        List<Ticket> tickets = ticketRepository.findByTechnicien_Id(idTechnicien);
         if (tickets.isEmpty()) {
             throw new DatabaseEmptyException();
         }
         return tickets;
     }
 
+
+    public List<Ticket> getTicketsByIdUser(Long userId) {
+        List<Ticket> tickets = ticketRepository.findByIdUser(userId);
+        if (tickets.isEmpty()) {
+            throw new DatabaseEmptyException();
+        }
+        return tickets;
+    }
     public List<Ticket> getAllTicket() {
         List<Ticket> tickets = ticketRepository.findAll();
         if (tickets.isEmpty()) {

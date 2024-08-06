@@ -1,4 +1,15 @@
 package com.itSupport.ITsupportApp.model;
 
-public class Admin {
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import lombok.*;
+
+@Entity
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@DiscriminatorValue("ADMIN")
+public class Admin extends Utilisateur {
+
 }
