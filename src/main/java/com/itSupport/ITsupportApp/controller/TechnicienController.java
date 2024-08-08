@@ -2,12 +2,10 @@ package com.itSupport.ITsupportApp.controller;
 
 import com.itSupport.ITsupportApp.enums.Role;
 import com.itSupport.ITsupportApp.exception.DatabaseEmptyException;
-import com.itSupport.ITsupportApp.model.Admin;
-import com.itSupport.ITsupportApp.model.Equipement;
-import com.itSupport.ITsupportApp.model.SignalPanne;
-import com.itSupport.ITsupportApp.model.Technicien;
+import com.itSupport.ITsupportApp.model.*;
 import com.itSupport.ITsupportApp.service.SignalPanneService;
 import com.itSupport.ITsupportApp.service.TechnicienService;
+import com.itSupport.ITsupportApp.service.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +22,7 @@ public class TechnicienController {
     private final PasswordEncoder passwordEncoder;
     private final TechnicienService technicienService;
     private final SignalPanneService signalPanneService;
+    private final TicketService ticketService;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody Technicien technicien) {
@@ -44,4 +43,14 @@ public class TechnicienController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+    @GetMapping("/getAllTicketByTechnicien/{id}")
+    public ResponseEntity<?> getAllTicketByTechnicien(@PathVariable Long id) {
+        try {
+            List<Ticket> ticketList = ticketService.getAllTicketByTechnicien(id);
+            return ResponseEntity.ok(ticketList);
+        } catch (DatabaseEmptyException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
 }

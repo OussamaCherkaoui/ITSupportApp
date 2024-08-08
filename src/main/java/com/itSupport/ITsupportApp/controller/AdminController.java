@@ -3,14 +3,8 @@ package com.itSupport.ITsupportApp.controller;
 import com.itSupport.ITsupportApp.enums.Role;
 import com.itSupport.ITsupportApp.exception.DatabaseEmptyException;
 import com.itSupport.ITsupportApp.exception.EquipementNotFoundException;
-import com.itSupport.ITsupportApp.model.Admin;
-import com.itSupport.ITsupportApp.model.Equipement;
-import com.itSupport.ITsupportApp.model.Panne;
-import com.itSupport.ITsupportApp.model.SignalPanne;
-import com.itSupport.ITsupportApp.service.AdminService;
-import com.itSupport.ITsupportApp.service.EquipementService;
-import com.itSupport.ITsupportApp.service.PanneService;
-import com.itSupport.ITsupportApp.service.SignalPanneService;
+import com.itSupport.ITsupportApp.model.*;
+import com.itSupport.ITsupportApp.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +23,7 @@ public class AdminController {
     private final EquipementService equipementService;
     private final SignalPanneService signalPanneService;
     private final PanneService panneService;
+    private final TicketService ticketService;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody Admin admin) {
@@ -101,4 +96,18 @@ public class AdminController {
         }
     }
 
+    @PostMapping("/attribuerTechnicien/{etat}")
+    public ResponseEntity<Ticket> attribuerTechnicien(@RequestBody Ticket ticket, Long idTechnicien) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(ticketService.attribuerTechnicien(ticket,idTechnicien));
+    }
+
+    @GetMapping("/getAllTicket")
+    public ResponseEntity<?> getAllTicket() {
+        try {
+            List<Ticket> ticketList = ticketService.getAllTicket();
+            return ResponseEntity.ok(ticketList);
+        } catch (DatabaseEmptyException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

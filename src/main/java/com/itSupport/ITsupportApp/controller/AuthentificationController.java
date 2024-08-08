@@ -28,8 +28,8 @@ public class AuthentificationController {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
         );
-        Utilisateur utilisateur = utilisateurService.getByUsername(authenticationRequest.getUsername());
         final UserDetails userDetails = utilisateurService.loadUserByUsername(authenticationRequest.getUsername());
+        Utilisateur utilisateur = utilisateurService.getUserByUsername(authenticationRequest.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails,utilisateur.getRole());
         return new ResponseEntity<>(new AuthenticationResponse(jwt), HttpStatus.OK);
     }

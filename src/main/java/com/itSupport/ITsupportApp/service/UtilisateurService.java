@@ -27,8 +27,8 @@ public class UtilisateurService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(utilisateur.getUsername(), utilisateur.getPassword(), utilisateur.getAuthorities());
     }
 
-    public Utilisateur getByUsername(String username) {
-        Utilisateur utilisateur = userRepository.findByUsername(username);
+    public Utilisateur getUserByUsername(String username) {
+        Utilisateur utilisateur = utilisateurRepository.findByUsername(username);
         if (utilisateur == null) {
             throw new UsernameNotFoundException("User not found");
         }

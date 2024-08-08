@@ -48,10 +48,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(req -> req
-                        .requestMatchers("/api/user/register", "/api/user/login","/api/user/teamInfo/**","/api/user/event/**","/api/user/contact/**").permitAll()
-                        .requestMatchers("/api/user/getIdByUserName/**", "/api/user/getUserByIdUser/**").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
-                        .requestMatchers("/api/user/**").hasAuthority(Role.USER.name())
-                        .requestMatchers("/api/admin/**").hasAuthority(Role.ADMIN.name())
+                        .requestMatchers("/user/register/**", "/admin/register/**","/technicien/register/**","/authentification/login/**").permitAll()
+                        .requestMatchers("/forAll/**").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name(),Role.TECH.name())
+                        .requestMatchers("/admin/**").hasAuthority(Role.ADMIN.name())
+                        .requestMatchers("/user/**").hasAuthority(Role.USER.name())
+                        .requestMatchers("/technicien/**").hasAuthority(Role.TECH.name())
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
