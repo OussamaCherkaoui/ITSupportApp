@@ -1,6 +1,8 @@
 package com.itSupport.ITsupportApp.service;
 
+import com.itSupport.ITsupportApp.dto.SignalPanneDto;
 import com.itSupport.ITsupportApp.exception.DatabaseEmptyException;
+import com.itSupport.ITsupportApp.mapper.SignalPanneMapper;
 import com.itSupport.ITsupportApp.model.Panne;
 import com.itSupport.ITsupportApp.model.SignalPanne;
 import com.itSupport.ITsupportApp.repository.PanneRepository;
@@ -19,6 +21,7 @@ import java.util.List;
 public class SignalPanneService {
 
     private final SignalRepository signalPanneRepository;
+    private final SignalPanneMapper signalPanneMapper;
 
     public SignalPanne save(SignalPanne signalPanne) {
         signalPanne.setDateEnregistrement(LocalDateTime.now());
@@ -31,12 +34,12 @@ public class SignalPanneService {
         }
         return signalPannes;
     }
-    public List<SignalPanne> getAllSignalPanneByIdEquipement(Long idEquipement) {
+    public List<SignalPanneDto> getAllSignalPanneByIdEquipement(Long idEquipement) {
         List<SignalPanne> signalPannes = signalPanneRepository.findByEquipement_Id(idEquipement);
         if (signalPannes.isEmpty()) {
             throw new DatabaseEmptyException();
         }
-        return signalPannes;
+        return signalPanneMapper.toDTO(signalPannes);
     }
 
     public List<SignalPanne> getAllSignalPanne() {

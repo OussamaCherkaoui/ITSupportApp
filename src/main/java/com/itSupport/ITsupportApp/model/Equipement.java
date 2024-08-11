@@ -33,6 +33,4 @@ public class Equipement {
     private String etat;
     @Column
     private String picture;
-    @OneToMany(mappedBy = "equipement", fetch = FetchType.EAGER)
-    private List<SignalPanne> signalPannes = new ArrayList<>();
 }

@@ -32,6 +32,4 @@ public class SignalPanne {
     @ManyToOne
     @JoinColumn(name = "panne_id")
     private Panne panne;
-    @OneToMany(mappedBy = "signalPanne", fetch = FetchType.EAGER)
-    private List<Ticket> tickets = new ArrayList<>();
 }

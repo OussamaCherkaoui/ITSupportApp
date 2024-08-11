@@ -37,4 +37,8 @@ public class PanneService {
         panneRepository.delete(panne);
         return panne;
     }
+
+    public Panne updatePanne(Panne panne) {
+        return panneRepository.save(panne);
+    }
 }

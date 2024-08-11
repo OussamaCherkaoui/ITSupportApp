@@ -23,8 +23,4 @@ public class Panne {
     private LocalDate dateCreation;
     @Column
     private String description;
-
-    @OneToMany(mappedBy = "panne", fetch = FetchType.EAGER)
-    private List<SignalPanne> signalPannes = new ArrayList<>();
-
 }

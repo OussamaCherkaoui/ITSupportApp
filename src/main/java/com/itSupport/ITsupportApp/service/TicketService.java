@@ -1,5 +1,6 @@
 package com.itSupport.ITsupportApp.service;
 
+import com.itSupport.ITsupportApp.dto.TicketDto;
 import com.itSupport.ITsupportApp.exception.DatabaseEmptyException;
 import com.itSupport.ITsupportApp.model.Technicien;
 import com.itSupport.ITsupportApp.model.Ticket;
@@ -47,6 +48,14 @@ public class TicketService {
     }
     public List<Ticket> getAllTicket() {
         List<Ticket> tickets = ticketRepository.findAll();
+        if (tickets.isEmpty()) {
+            throw new DatabaseEmptyException();
+        }
+        return tickets;
+    }
+
+    public List<TicketDto> getAllTicketByIdSignalPanne(Long id) {
+        List<TicketDto> tickets = ticketRepository.findBySignalPanne_Panne_Id(id);
         if (tickets.isEmpty()) {
             throw new DatabaseEmptyException();
         }

@@ -30,27 +30,7 @@ public class TechnicienController {
         technicien.setPassword(passwordEncoder.encode(technicien.getPassword()));
         return new ResponseEntity<>(technicienService.save(technicien), HttpStatus.CREATED);
     }
-    @PutMapping("/changeEtatSignalPanne")
-    public ResponseEntity<?> changeEtat(@RequestBody SignalPanne signalPanne, @PathVariable String etat) {
-        return ResponseEntity.status(HttpStatus.OK).body(signalPanneService.changeEtat(signalPanne,etat));
-    }
-    @GetMapping("/getAllSignalPannesByTechnicien/{id}")
-    public ResponseEntity<?> getAllSignalPannes(@PathVariable Long id) {
-        try {
-            List<SignalPanne> signalPannes = signalPanneService.getAllSignalPanneByIdTechnicien(id);
-            return ResponseEntity.ok(signalPannes);
-        } catch (DatabaseEmptyException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-    @GetMapping("/getAllTicketByTechnicien/{id}")
-    public ResponseEntity<?> getAllTicketByTechnicien(@PathVariable Long id) {
-        try {
-            List<Ticket> ticketList = ticketService.getAllTicketByTechnicien(id);
-            return ResponseEntity.ok(ticketList);
-        } catch (DatabaseEmptyException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
+
+
 
 }
