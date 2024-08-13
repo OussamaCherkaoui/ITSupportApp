@@ -14,9 +14,11 @@ public interface TicketMapper {
 
     @Mapping(source = "technicien.id", target = "technicien_id")
     @Mapping(source = "signalPanne.id", target = "signalPanne_id")
+    @Mapping(source = "dateOuverture", target = "dateOuverture")
     TicketDto toDTO(Ticket ticket);
     @Mapping(source = "technicien_id", target = "technicien.id")
     @Mapping(source = "signalPanne_id", target = "signalPanne.id")
+    @Mapping(source = "dateOuverture", target = "dateOuverture")
     Ticket toEntity(TicketDto ticketDTO);
 
     List<TicketDto> toDTO(List<Ticket> ticketList);

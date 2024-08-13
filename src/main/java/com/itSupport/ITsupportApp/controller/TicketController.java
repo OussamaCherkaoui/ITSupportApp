@@ -35,8 +35,9 @@ public class TicketController {
         }
     }
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/admin/attribuerTechnicien/{idTechnicien}")
-    public ResponseEntity<Ticket> attribuerTechnicien(@RequestBody Ticket ticket, Long idTechnicien) {
+    @PostMapping("/attribuerTechnicien/{idTicket}/{idTechnicien}")
+    public ResponseEntity<Ticket> attribuerTechnicien(@PathVariable Long idTicket,@PathVariable Long idTechnicien) {
+        Ticket ticket = ticketService.getTicketById(idTicket);
         return ResponseEntity.status(HttpStatus.CREATED).body(ticketService.attribuerTechnicien(ticket,idTechnicien));
     }
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -51,7 +52,7 @@ public class TicketController {
     }
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/getAllTicketByIdSignalPanne/{id}")
-    public ResponseEntity<?> getAllTicketByIdPanne(@PathVariable Long id) {
+    public ResponseEntity<?> getAllTicketByIdSignalPanne(@PathVariable Long id) {
         try {
             List<TicketDto> ticketListDto = ticketService.getAllTicketByIdSignalPanne(id);
             return ResponseEntity.ok(ticketListDto);
@@ -59,6 +60,7 @@ public class TicketController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
     @PreAuthorize("hasAuthority('TECH')")
     @GetMapping("/getAllTicketByTechnicien/{id}")
     public ResponseEntity<?> getAllTicketByTechnicien(@PathVariable Long id) {

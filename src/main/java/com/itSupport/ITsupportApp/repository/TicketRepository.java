@@ -13,5 +13,5 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     @Query(value = "select T.date_ouverture,T.description,S.etat from ticket T inner join signal_panne S inner join user U on S.id=T.signal_panne_id and S.user_id=U.id and U.id=:userId",nativeQuery = true)
     List<Ticket> findByIdUser(Long userId);
 
-    List<TicketDto> findBySignalPanne_Panne_Id(Long id);
+    List<Ticket> findBySignalPanne_Id(Long id);
 }

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -40,5 +41,10 @@ public class PanneService {
 
     public Panne updatePanne(Panne panne) {
         return panneRepository.save(panne);
+    }
+
+    public Panne getById(Long panneId) {
+        Optional<Panne> panne = panneRepository.findById(panneId);
+        return panne.get();
     }
 }

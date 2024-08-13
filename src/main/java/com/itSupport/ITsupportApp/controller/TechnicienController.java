@@ -9,6 +9,7 @@ import com.itSupport.ITsupportApp.service.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,12 @@ public class TechnicienController {
         technicien.setRole(Role.TECH);
         technicien.setPassword(passwordEncoder.encode(technicien.getPassword()));
         return new ResponseEntity<>(technicienService.save(technicien), HttpStatus.CREATED);
+    }
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/getAllTechnicien")
+    public ResponseEntity<?> getAllTechnicien() {
+        List<Technicien> technicienList = technicienService.getAll();
+        return new ResponseEntity<>(technicienList, HttpStatus.OK);
     }
 
 

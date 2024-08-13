@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 public class TicketDto {
     private Long id;
-    private LocalDateTime DateOuverture;
+    private LocalDateTime dateOuverture;
     private String description;
     private Long signalPanne_id;
     private Long technicien_id;

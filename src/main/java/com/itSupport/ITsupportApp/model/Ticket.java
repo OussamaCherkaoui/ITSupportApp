@@ -18,7 +18,7 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
-    private LocalDateTime DateOuverture;
+    private LocalDateTime dateOuverture;
     @Column
     private String description;
     @ManyToOne

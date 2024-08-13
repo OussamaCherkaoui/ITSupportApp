@@ -2,6 +2,7 @@ package com.itSupport.ITsupportApp.service;
 
 import com.itSupport.ITsupportApp.dto.TicketDto;
 import com.itSupport.ITsupportApp.exception.DatabaseEmptyException;
+import com.itSupport.ITsupportApp.mapper.TicketMapper;
 import com.itSupport.ITsupportApp.model.Technicien;
 import com.itSupport.ITsupportApp.model.Ticket;
 import com.itSupport.ITsupportApp.repository.TicketRepository;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -18,6 +20,7 @@ import java.util.List;
 public class TicketService {
     private final TicketRepository ticketRepository;
     private final TechnicienService technicienService;
+    private final TicketMapper ticketMapper;
 
     public Ticket save(Ticket ticket) {
         ticket.setDateOuverture(LocalDateTime.now());
@@ -55,10 +58,16 @@ public class TicketService {
     }
 
     public List<TicketDto> getAllTicketByIdSignalPanne(Long id) {
-        List<TicketDto> tickets = ticketRepository.findBySignalPanne_Panne_Id(id);
+        List<Ticket> tickets = ticketRepository.findBySignalPanne_Id(id);
         if (tickets.isEmpty()) {
             throw new DatabaseEmptyException();
         }
-        return tickets;
+        return ticketMapper.toDTO(tickets);
+    }
+
+    public Ticket getTicketById(Long idTicket) {
+        Optional<Ticket> ticket = ticketRepository.findById(idTicket);
+
+        return ticket.get();
     }
 }

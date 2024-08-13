@@ -23,5 +23,6 @@ public interface SignalPanneMapper {
     SignalPanne toEntity(SignalPanneDto signalPanneDto);
 
     List<SignalPanneDto> toDTO(List<SignalPanne> signalPanneList);
+
     List<SignalPanne> toEntity(List<SignalPanneDto> signalPanneDtoList);
 }
