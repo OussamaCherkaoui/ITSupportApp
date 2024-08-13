@@ -2,6 +2,7 @@ package com.itSupport.ITsupportApp.controller;
 
 import com.itSupport.ITsupportApp.dto.TicketDto;
 import com.itSupport.ITsupportApp.exception.DatabaseEmptyException;
+import com.itSupport.ITsupportApp.mapper.TicketMapper;
 import com.itSupport.ITsupportApp.model.Ticket;
 import com.itSupport.ITsupportApp.service.SignalPanneService;
 import com.itSupport.ITsupportApp.service.TicketService;
@@ -19,9 +20,13 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class TicketController {
     private final TicketService ticketService;
+    private final TicketMapper ticketMapper;
+
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/saveTicket")
-    public ResponseEntity<Ticket> signalPanne(@RequestBody Ticket ticket) {
+    public ResponseEntity<Ticket> signalPanne(@RequestBody TicketDto ticketDto) {
+        Ticket ticket = ticketMapper.toEntity(ticketDto);
+        ticket.setTechnicien(null);
         return ResponseEntity.status(HttpStatus.CREATED).body(ticketService.save(ticket));
     }
     @PreAuthorize("hasAuthority('USER')")
@@ -50,7 +55,7 @@ public class TicketController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping("/getAllTicketByIdSignalPanne/{id}")
     public ResponseEntity<?> getAllTicketByIdSignalPanne(@PathVariable Long id) {
         try {

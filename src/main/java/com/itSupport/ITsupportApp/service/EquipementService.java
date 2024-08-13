@@ -45,4 +45,9 @@ public class EquipementService {
         equipement.setEtat(etat);
         return equipementRepository.save(equipement);
     }
+
+    public Equipement getByIdSignalPanne(Long id) {
+        Equipement equipement = equipementRepository.findByIdSignalPanne(id);
+        return equipement;
+    }
 }

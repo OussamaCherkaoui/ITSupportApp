@@ -13,4 +13,6 @@ public interface SignalRepository extends JpaRepository<SignalPanne, Long> {
     List<SignalPanne> findByEquipement_Id(Long id);
     @Query(value = "select s.* from signal_panne s inner join ticket t inner join technicien te on s.id=t.signal_panne_id and t.technicien_id=:idTechnicien",nativeQuery = true)
     List<SignalPanne> findByIdTechnicien(Long idTechnicien);
+    @Query(value = "select s.* from signal_panne s inner join ticket t on s.id=t.signal_panne_id and t.id=:idTicket",nativeQuery = true)
+    SignalPanne findByIdTicket(Long idTicket);
 }

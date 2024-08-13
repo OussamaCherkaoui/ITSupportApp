@@ -2,10 +2,12 @@ package com.itSupport.ITsupportApp.controller;
 
 import com.itSupport.ITsupportApp.dto.SignalPanneDto;
 import com.itSupport.ITsupportApp.exception.DatabaseEmptyException;
+import com.itSupport.ITsupportApp.mapper.SignalPanneMapper;
 import com.itSupport.ITsupportApp.model.Equipement;
 import com.itSupport.ITsupportApp.model.Panne;
 import com.itSupport.ITsupportApp.model.SignalPanne;
 import com.itSupport.ITsupportApp.model.User;
+import com.itSupport.ITsupportApp.repository.SignalRepository;
 import com.itSupport.ITsupportApp.service.EquipementService;
 import com.itSupport.ITsupportApp.service.PanneService;
 import com.itSupport.ITsupportApp.service.SignalPanneService;
@@ -17,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/signalPanne")
@@ -27,6 +30,8 @@ public class SignalPanneController {
     private final PanneService panneService;
     private final UserService userService;
     private final EquipementService equipementService;
+    private final SignalPanneMapper signalPanneMapper;
+    private final SignalRepository signalRepository;
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/saveSignalPanne/{idUser}/{idEquipement}/{panneId}")
@@ -46,6 +51,16 @@ public class SignalPanneController {
         try {
             List<SignalPanne> signalPannes = signalPanneService.getAllSignalPanneByIdUser(id);
             return ResponseEntity.ok(signalPannes);
+        } catch (DatabaseEmptyException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+    @PreAuthorize("hasAuthority('TECH')")
+    @GetMapping("/getSignalPannesByIdTicket/{id}")
+    public ResponseEntity<?> getAllSignalPannesByIdTicket(@PathVariable Long id) {
+        try {
+            SignalPanne signalPanne = signalPanneService.getAllSignalPanneByIdTicket(id);
+            return ResponseEntity.ok(signalPanne);
         } catch (DatabaseEmptyException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -71,16 +86,17 @@ public class SignalPanneController {
         }
     }
     @PreAuthorize("hasAuthority('TECH')")
-    @PutMapping("/changeEtatSignalPanne")
-    public ResponseEntity<?> changeEtat(@RequestBody SignalPanne signalPanne, @PathVariable String etat) {
-        return ResponseEntity.status(HttpStatus.OK).body(signalPanneService.changeEtat(signalPanne,etat));
+    @PutMapping("/changeEtatSignalPanne/{idSignalPanne}/{etat}")
+    public ResponseEntity<?> changeEtat(@PathVariable Long idSignalPanne, @PathVariable String etat) {
+        Optional<SignalPanne> signalPanne = signalRepository.findById(idSignalPanne);
+        return ResponseEntity.status(HttpStatus.OK).body(signalPanneService.changeEtat(signalPanne.get(),etat));
     }
     @PreAuthorize("hasAuthority('TECH')")
     @GetMapping("/getAllSignalPannesByTechnicien/{id}")
     public ResponseEntity<?> getAllSignalPannesByTechnicien(@PathVariable Long id) {
         try {
             List<SignalPanne> signalPannes = signalPanneService.getAllSignalPanneByIdTechnicien(id);
-            return ResponseEntity.ok(signalPannes);
+            return ResponseEntity.ok(signalPanneMapper.toDTO(signalPannes));
         } catch (DatabaseEmptyException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

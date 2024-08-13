@@ -57,4 +57,15 @@ public class EquipementController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    @PreAuthorize("hasAuthority('TECH')")
+    @GetMapping("/getEquipementByIdSignalPanne/{id}")
+    public ResponseEntity<?> getEquipementByIdSignalPanne(@PathVariable Long id) {
+        try {
+            Equipement equipement = equipementService.getByIdSignalPanne(id);
+            return ResponseEntity.ok(equipement);
+        } catch (DatabaseEmptyException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

@@ -63,4 +63,9 @@ public class SignalPanneService {
         }
         return signalPannes;
     }
+
+    public SignalPanne getAllSignalPanneByIdTicket(Long id) {
+        SignalPanne signalPanne= signalPanneRepository.findByIdTicket(id);
+        return signalPanne;
+    }
 }
