@@ -156,7 +156,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>ITsupportApp</finalName>
 	</build>
-
-
 </project>
